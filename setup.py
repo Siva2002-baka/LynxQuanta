@@ -42,6 +42,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'wheel_controller = lynx_quanta.wheel_controller:main',
         ],
     },
 )

@@ -178,6 +178,20 @@ def generate_launch_description():
         parameters=[{"use_sim_time": use_sim_time}],
         output="screen",
     )
+
+    wheel_velocity_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["wheel_velocity_controller"],
+        output="screen",
+    )
+    wheel_controller_node = Node(
+        package="lynx_quanta",
+        executable="wheel_controller",
+        name="wheel_controller",
+        output="screen",
+        parameters=[{"use_sim_time": use_sim_time}],
+    )
     # Create the launch description and populate
     ld = LaunchDescription()
 
@@ -190,6 +204,8 @@ def generate_launch_description():
     ld.add_action(gz_ros2_bridge)
     ld.add_action(joint_state_broadcaster_spawner)
     ld.add_action(leg_pose_controller_spawner)
+    ld.add_action(wheel_velocity_controller_spawner)
+    ld.add_action(wheel_controller_node)
     # ld.add_action(joint_state_publisher_node)
     # Launch Robot State Publisher
     ld.add_action(start_robot_state_publisher_cmd)

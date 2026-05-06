@@ -7,6 +7,9 @@ controller_manager:
 
     leg_pose_controller:
       type: position_controllers/JointGroupPositionController
+    
+    wheel_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
 
 leg_pose_controller:
   ros__parameters:
@@ -23,3 +26,12 @@ leg_pose_controller:
       - hr_hipx_joint
       - hr_hipy_joint
       - hr_knee_joint
+
+wheel_velocity_controller:
+  ros__parameters:
+    joints:
+      - fl_wheel_joint
+      - fr_wheel_joint
+      - hl_wheel_joint
+      - hr_wheel_joint
+      
