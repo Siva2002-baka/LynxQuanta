@@ -7,6 +7,12 @@
     <!-- <mujoco>
         <compiler meshdir="file://$(find lynx_quanta)/meshes/m20/" balanceinertia="false" discardvisual="false"/>
     </mujoco> -->
+    <link name="base_footprint"/>
+    <joint name="base_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
     <link name="base_link">
         <inertial>
             <origin xyz="0.00355105878308153 0.0016507579200937 -0.00346462146571654" rpy="0 0 0"/>
@@ -503,105 +509,105 @@
         <limit effort="21.6" velocity="79.3"/>
     </joint>
 
-<ros2_control name="m20_with_arm_system" type="system">
-  <hardware>
-    <plugin>gz_ros2_control/GazeboSimSystem</plugin>
-  </hardware>
-  <joint name="fr_hipx_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="fr_hipy_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="fr_knee_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="fl_hipx_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="fl_hipy_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="fl_knee_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hr_hipx_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hr_hipy_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hr_knee_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hl_hipx_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hl_hipy_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hl_knee_joint">
-    <command_interface name="position"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-  </joint>
-    <joint name="hl_wheel_joint">
-    <command_interface name="velocity"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-    </joint>
+    <ros2_control name="m20_with_arm_system" type="system">
+        <hardware>
+            <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+        </hardware>
+        <joint name="fr_hipx_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="fr_hipy_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="fr_knee_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="fl_hipx_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="fl_hipy_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="fl_knee_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hr_hipx_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hr_hipy_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hr_knee_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hl_hipx_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hl_hipy_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hl_knee_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="hl_wheel_joint">
+            <command_interface name="velocity"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
 
-    <joint name="hr_wheel_joint">
-    <command_interface name="velocity"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-    </joint>
-    <joint name="fl_wheel_joint">
-    <command_interface name="velocity"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-    </joint>
+        <joint name="hr_wheel_joint">
+            <command_interface name="velocity"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+        <joint name="fl_wheel_joint">
+            <command_interface name="velocity"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
 
-    <joint name="fr_wheel_joint">
-    <command_interface name="velocity"/>
-    <state_interface name="position"/>
-    <state_interface name="velocity"/>
-    </joint>
-</ros2_control>
+        <joint name="fr_wheel_joint">
+            <command_interface name="velocity"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+    </ros2_control>
 
-<gazebo>
+    <gazebo>
         <plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher">
             <topic>/joint_states</topic>
         </plugin>
     </gazebo>
-<gazebo>
-  <plugin
-      filename="gz_ros2_control-system"
-      name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-    <parameters>$(arg ros2_control_yaml)</parameters>
-  </plugin>
-</gazebo>
+    <gazebo>
+    <plugin
+        filename="gz_ros2_control-system"
+        name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>$(find lynx_quanta)/config/m20_with_arm_controller.yaml</parameters>
+    </plugin>
+    </gazebo>
 
 </robot>

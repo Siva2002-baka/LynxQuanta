@@ -12,18 +12,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     # Create the launch configuration variables
     use_sim_time = LaunchConfiguration('use_sim_time')
-    urdf = os.path.join(get_package_share_directory(
-        'lynx_quanta'), 'urdf', 'm20_with_arm', 'm20_with_arm.urdf')
-    
-    # local_model_path = os.path.join(get_package_share_directory('turtlebot'), 'models')
-    # set_gazebo_model_path = SetEnvironmentVariable(
-    #     name='GZ_SIM_RESOURCE_PATH',
-    #     value=[
-    #         local_model_path,
-    #          ':',
-    #          os.path.join(get_package_share_directory('gazebo_worlds'), 'models')
-    #         ]
-    # )
+    urdf = os.path.join(get_package_share_directory('lynx_quanta'), 'urdf', 'm20_with_arm', 'm20_with_arm.urdf')
     control_yaml_file = os.path.join(get_package_share_directory('lynx_quanta'), 'config', 'm20_with_arm_controller.yaml')
     robot_desc = ParameterValue(Command(
         [
@@ -107,62 +96,53 @@ def generate_launch_description():
             remappings=[('/cmd_vel_nav', '/cmd_vel')],
             arguments=[])
  
-    slam_toolbox = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            PathJoinSubstitution([
-                FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py'
-            ])
+    # slam_toolbox = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource([
+    #         PathJoinSubstitution([
+    #             FindPackageShare('slam_toolbox'), 'launch', 'online_async_launch.py'
+    #         ])
 
-        ]),
-        launch_arguments={
-            'slam_params_file': PathJoinSubstitution(
-                [
-                    FindPackageShare('turtlebot'), 'config', 'mapper_params_online_async.yaml',
-                ]
-            ),
-            'use_sim_time': 'true',
+    #     ]),
+    #     launch_arguments={
+    #         'slam_params_file': PathJoinSubstitution(
+    #             [
+    #                 FindPackageShare('lynx_m20'), 'config', 'mapper_params_online_async.yaml',
+    #             ]
+    #         ),
+    #         'use_sim_time': 'true',
 
-        }.items()
-    )
-    nav2 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            PathJoinSubstitution([
-                FindPackageShare('nav2_bringup'),
-                'launch',
-                'navigation_launch.py'
-            ])
-        ),
-        launch_arguments={
-            'use_sim_time': 'true',
-            # 'slam': 'False',
-            # 'map_subscribe_transient_local': 'true',
-            'params_file': PathJoinSubstitution([
-                    FindPackageShare('turtlebot'),
-                    'config',
-                    'nav2_params.yaml'
-        ]),
-        }.items()
-    )
-    static_tf_bridge = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='camera_frame_fix',
-        arguments=[
-            "0", "0", "0", "0", "0", "0",  # no translation/rotation
-            "base_link",                    # parent
-            "turtlebot_burger/base_link/realsense"  # child
-        ]
-    )
+    #     }.items()
+    # )
+    # nav2 = IncludeLaunchDescription(
+    #     PythonLaunchDescriptionSource(
+    #         PathJoinSubstitution([
+    #             FindPackageShare('nav2_bringup'),
+    #             'launch',
+    #             'navigation_launch.py'
+    #         ])
+    #     ),
+    #     launch_arguments={
+    #         'use_sim_time': 'true',
+    #         # 'slam': 'False',
+    #         # 'map_subscribe_transient_local': 'true',
+    #         'params_file': PathJoinSubstitution([
+    #                 FindPackageShare('lynx_m20'),
+    #                 'config',
+    #                 'nav2_params.yaml'
+    #     ]),
+    #     }.items()
+    # )
 
-    rviz_node = Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            output='screen',
-            parameters=[{'use_sim_time': use_sim_time}],
-            arguments=['-d', os.path.join(
-                        get_package_share_directory('turtlebot'), 'config', 'turtlebot_v4.rviz')]
-        )
+
+    # rviz_node = Node(
+    #         package='rviz2',
+    #         executable='rviz2',
+    #         name='rviz2',
+    #         output='screen',
+    #         parameters=[{'use_sim_time': use_sim_time}],
+    #         arguments=['-d', os.path.join(
+    #                     get_package_share_directory('lynx_m20'), 'config', 'lynx_m20.rviz')]
+    #     )
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
