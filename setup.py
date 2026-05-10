@@ -43,7 +43,9 @@ setup(
     entry_points={
         'console_scripts': [
             'wheel_controller = lynx_quanta.wheel_controller:main',
-            'teleop_node = lynx_quanta.teleop_node:main',  
+            'leg_controller = lynx_quanta.leg_pose_controller:main',
+            'teleop_node = lynx_quanta.teleop_node:main',
+            'lynx_brain = lynx_quanta.lynx_brain:main',
         ],
     },
 )

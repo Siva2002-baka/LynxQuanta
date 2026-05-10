@@ -28,6 +28,16 @@ class M20SkidSteerController(Node):
             "/wheel_velocity_controller/commands",
             10
         )
+        self.locked = False
+        self.lock_sub = self.create_subscription(Bool, '/lynx/wheel_lock', self.lock_callback, 10)
+
+        def lock_callback(self, msg):
+            self.locked = msg.data
+
+        # Update your cmd_vel_callback
+        def cmd_vel_callback(self, msg):
+            if self.locked:
+                return # Do nothing if sitting
 
         self.get_logger().info("M20 skid-steer controller started")
 
