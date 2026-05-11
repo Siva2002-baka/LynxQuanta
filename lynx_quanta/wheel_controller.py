@@ -33,6 +33,9 @@ class M20SkidSteerController(Node):
 
     def lock_callback(self, msg):
         self.locked = msg.data
+        self.get_logger().info(
+            f"Wheel lock {'enabled' if self.locked else 'disabled'}"
+        )
 
         if self.locked:
             self.publish_wheel_command(0.0, 0.0)
