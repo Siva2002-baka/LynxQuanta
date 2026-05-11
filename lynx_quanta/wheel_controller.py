@@ -4,7 +4,7 @@ import rclpy
 from rclpy.node import Node
 
 from geometry_msgs.msg import Twist
-from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Float64MultiArray, Bool
 
 
 class M20SkidSteerController(Node):
@@ -31,20 +31,22 @@ class M20SkidSteerController(Node):
         self.locked = False
         self.lock_sub = self.create_subscription(Bool, '/lynx/wheel_lock', self.lock_callback, 10)
 
-        def lock_callback(self, msg):
-            self.locked = msg.data
+    def lock_callback(self, msg):
+        self.locked = msg.data
+        self.get_logger().info(
+            f"Wheel lock {'enabled' if self.locked else 'disabled'}"
+        )
 
-        # Update your cmd_vel_callback
-        def cmd_vel_callback(self, msg):
-            if self.locked:
-                return # Do nothing if sitting
-
-        self.get_logger().info("M20 skid-steer controller started")
+        if self.locked:
+            self.publish_wheel_command(0.0, 0.0)
 
     def clamp(self, value, min_value, max_value):
         return max(min(value, max_value), min_value)
 
     def cmd_vel_callback(self, msg):
+        if self.locked:
+            return
+
         v = msg.linear.x
         wz = msg.angular.z
 
@@ -57,6 +59,9 @@ class M20SkidSteerController(Node):
         wl = self.clamp(wl, -self.max_wheel_speed, self.max_wheel_speed)
         wr = self.clamp(wr, -self.max_wheel_speed, self.max_wheel_speed)
 
+        self.publish_wheel_command(wl, wr)
+
+    def publish_wheel_command(self, wl, wr):
         cmd = Float64MultiArray()
 
         # Joint order must match YAML:
