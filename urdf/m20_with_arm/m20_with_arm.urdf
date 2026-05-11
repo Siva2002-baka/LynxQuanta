@@ -4,6 +4,8 @@
      For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
 <robot name="M20"  xmlns:xacro="http://ros.org/wiki/xacro">
 <xacro:arg name="ros2_control_yaml" default=""/>
+<xacro:include filename="$(find lynx_quanta)/urdf/arm/lite6.xacro"/>
+<xacro:lite6_arm prefix="arm_"/>
     <!-- <mujoco>
         <compiler meshdir="file://$(find lynx_quanta)/meshes/m20/" balanceinertia="false" discardvisual="false"/>
     </mujoco> -->
@@ -44,6 +46,12 @@
             </geometry>
         </collision>
     </link>
+    <!-- Lite6 arm mounted on top of M20 base -->
+    <joint name="arm_mount_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="arm_link_base"/>
+        <origin xyz="0 0 0.09" rpy="0 0 0"/>
+    </joint>
     <link name="fl_hipx">
         <inertial>
             <origin xyz="-0.0111893129496933 0.00891693461032669 0.000405665689861192" rpy="0 0 0"/>
@@ -592,6 +600,43 @@
 
         <joint name="fr_wheel_joint">
             <command_interface name="velocity"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+
+        <!-- Arm Control -->
+        <joint name="arm_joint1">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="arm_joint2">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="arm_joint3">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="arm_joint4">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="arm_joint5">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+        </joint>
+
+        <joint name="arm_joint6">
+            <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
         </joint>

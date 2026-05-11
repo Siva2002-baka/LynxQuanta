@@ -11,6 +11,9 @@ controller_manager:
     wheel_velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
 
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
 leg_pose_controller:
   ros__parameters:
     joints:
@@ -34,4 +37,22 @@ wheel_velocity_controller:
       - fr_wheel_joint
       - hl_wheel_joint
       - hr_wheel_joint
-      
+
+arm_controller:
+  ros__parameters:
+    joints:
+      - arm_joint1
+      - arm_joint2
+      - arm_joint3
+      - arm_joint4
+      - arm_joint5
+      - arm_joint6
+    command_interfaces:
+      - position
+    
+    state_interfaces:
+      - position
+      - velocity
+
+    allow_partial_joints_goal: false
+    

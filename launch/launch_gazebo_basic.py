@@ -12,8 +12,8 @@ from launch_ros.parameter_descriptions import ParameterValue
 def generate_launch_description():
     # Create the launch configuration variables
     use_sim_time = LaunchConfiguration('use_sim_time')
-    # urdf = os.path.join(get_package_share_directory('lynx_quanta'), 'urdf', 'm20_with_arm', 'm20_with_arm.urdf')
-    urdf = os.path.join(get_package_share_directory('lynx_quanta'), 'urdf', 'm20_with_arm_low_res', 'm20_with_arm_low_res.urdf')
+    urdf = os.path.join(get_package_share_directory('lynx_quanta'), 'urdf', 'm20_with_arm', 'm20_with_arm.urdf')
+    # urdf = os.path.join(get_package_share_directory('lynx_quanta'), 'urdf', 'm20_with_arm_low_res', 'm20_with_arm_low_res.urdf')
     control_yaml_file = os.path.join(get_package_share_directory('lynx_quanta'), 'config', 'm20_with_arm_controller.yaml')
     robot_desc = ParameterValue(Command(
         [
