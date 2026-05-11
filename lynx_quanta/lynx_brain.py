@@ -1,32 +1,4 @@
 #!/usr/bin/env python3
-"""
-LynxBrain — LYNX M20 Pro gait engine
-=====================================
-Two important fixes vs previous version:
-
-  1. SPIN WHEEL DIRECTION CORRECTED
-     Previous version had wheels driving the body OPPOSITE to legs, so
-     the two were fighting each other — that's why bumping wheel rate
-     from 1.6 → 3.0 caused a face-plant (stronger fight, more tipping).
-
-     Tank-steer convention to turn the body LEFT (CCW from above):
-       LEFT  wheels go BACKWARD (negative)
-       RIGHT wheels go FORWARD  (positive)
-     Now matches what the legs are doing.
-
-  2. SIT POSE — TRUE FROG-FLAT (belly on floor)
-     Previous attempt used SIT_Z = 0.05 (foot 5 cm below hip).
-     That still left the LEGS supporting the body weight when splayed,
-     so body floated above the floor.
-
-     Fix: SIT_Z = 0.00 (foot at exactly hip height) → hipx = 90°.
-     Legs stick STRAIGHT OUT to the sides like a frog. They have zero
-     vertical projection, so they cannot support body weight → belly
-     drops to the ground.
-
-     Per-leg hipx sign mirroring kept (right-side legs need −hipx for
-     outward splay since URDF uses unified +hipx = "to body's left").
-"""
 
 import math
 import rclpy
@@ -68,19 +40,11 @@ class LynxBrain(Node):
     # sense) so wheels and legs cooperate — no faceplant.
     SPIN_WHEEL_RATE = 2.0
 
-    # ── SIT (frog-flat: legs straight out sideways, belly on floor) ────────
-    # SIT_Z = 0 → hipx = 90° → leg sticks horizontally out to the side
-    # → zero vertical leg support → body drops to the floor.
-    SIT_Y_LAT = 0.22      # lateral foot reach
-    SIT_Z     = 0.00      # zero depth → leg is fully horizontal
-    SIT_DUR   = 1.5
-
-    # ── URDF hipx sign (positive hipx = body's +y for ALL legs in this URDF)
-    # Right-side legs need NEGATIVE hipx to splay OUTWARD.
-    HIPX_SIGN_FL = +1.0
-    HIPX_SIGN_FR = -1.0
-    HIPX_SIGN_HL = +1.0
-    HIPX_SIGN_HR = -1.0
+    SIT_FL  = [-0.436, 1.319, -2.809]
+    SIT_FR  = [+0.436, 1.319, -2.809]
+    SIT_HL  = [-0.436, 1.312, -2.792]
+    SIT_HR  = [+0.436, 1.312, -2.792]
+    SIT_DUR = 1.5
 
     def __init__(self):
         super().__init__('lynx_brain')
@@ -138,40 +102,32 @@ class LynxBrain(Node):
             z = self.H_STAND - self.LIFT * math.sin(math.pi * prog)
             return (val, z, 0.0) if mode == "FWD" else (0.0, z, val)
 
-    # ── Sit pose with per-leg hipx sign mirroring ──────────────────────────
+    # ── Sit pose — smoothstep interpolation to verified joint targets ──────
 
     def _sit_pose_legs(self):
-        """Smoothstep STAND → fully splayed FROG sit. Returns 4 leg poses."""
+        """Returns [fl, fr, hl, hr], each [hipx, hipy, knee]."""
         a = min(1.0, self.sit_t / self.SIT_DUR)
-        s = a * a * (3.0 - 2.0 * a)
+        s = a * a * (3.0 - 2.0 * a)        # smoothstep
 
-        # STAND endpoint: foot below hip
+        # Starting pose: STAND (foot directly below hip)
         stand_hipy, stand_knee = ik_2link(0.0, self.H_STAND)
+        stand = [0.0, stand_hipy, stand_knee]
 
-        # SIT endpoint: leg straight out sideways
-        sit_d = math.sqrt(self.SIT_Y_LAT**2 + self.SIT_Z**2)
-        # Use π/2 explicitly when SIT_Z = 0 to avoid div-by-zero in atan2
-        sit_hipx_mag = math.pi / 2.0 if abs(self.SIT_Z) < 1e-6 \
-                                     else math.atan2(self.SIT_Y_LAT, self.SIT_Z)
-        sit_hipy, sit_knee = ik_2link(0.0, sit_d)
-
-        # Interpolate
-        hipx_mag = s * sit_hipx_mag                     # starts at 0
-        hipy = stand_hipy + s * (sit_hipy - stand_hipy)
-        knee = stand_knee + s * (sit_knee  - stand_knee)
+        def lerp(p0, p1):
+            return [p0[i] + s * (p1[i] - p0[i]) for i in range(3)]
 
         return [
-            [self.HIPX_SIGN_FL * hipx_mag, hipy, knee],   # FL
-            [self.HIPX_SIGN_FR * hipx_mag, hipy, knee],   # FR
-            [self.HIPX_SIGN_HL * hipx_mag, hipy, knee],   # HL
-            [self.HIPX_SIGN_HR * hipx_mag, hipy, knee],   # HR
+            lerp(stand, self.SIT_FL),
+            lerp(stand, self.SIT_FR),
+            lerp(stand, self.SIT_HL),
+            lerp(stand, self.SIT_HR),
         ]
 
     # ── Main 50 Hz tick ────────────────────────────────────────────────────
 
     def tick(self):
 
-        # ── SIT (frog splay, belly on floor) ────────────────────────────────
+        # ── SIT (interpolated to verified joint targets) ───────────────────
         if self.posture == "SIT":
             self.sit_t = min(self.SIT_DUR, self.sit_t + self.DT)
             fl, fr, hl, hr = self._sit_pose_legs()
@@ -191,17 +147,10 @@ class LynxBrain(Node):
         pA, pB = self.phase, (self.phase + math.pi) % (2.0 * math.pi)
 
         # ── SPIN (legs + wheels in MATCHED direction) ──────────────────────
-        # Tank-steer:
-        #   To turn body CCW (left from above):
-        #     LEFT  side moves BACKWARD  → ld = -1, wL negative
-        #     RIGHT side moves FORWARD   → rd = +1, wR positive
-        #   To turn body CW (right):
-        #     LEFT  side moves FORWARD   → ld = +1, wL positive
-        #     RIGHT side moves BACKWARD  → rd = -1, wR negative
         if "S_" in self.walk_type:
-            if "CCW" in self.walk_type:           # turn LEFT
+            if "CCW" in self.walk_type:
                 ld, rd = -1.0, +1.0
-            else:                                  # SPIN_CW, turn RIGHT
+            else:
                 ld, rd =  1.0, -1.0
 
             cs = [
@@ -211,8 +160,6 @@ class LynxBrain(Node):
                 self._get_coords(pA, rd),    # HR — right
             ]
 
-            # Wheel publish order: fl, fr, hl, hr.
-            # Each wheel rate matches its side's leg direction.
             wL = self.SPIN_WHEEL_RATE * ld
             wR = self.SPIN_WHEEL_RATE * rd
             self.wheel_pub.publish(Float64MultiArray(
