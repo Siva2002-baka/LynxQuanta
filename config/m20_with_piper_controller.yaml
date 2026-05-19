@@ -1,0 +1,124 @@
+# =============================================================================
+# m20_with_piper_controller.yaml
+# ROS 2 Control configuration for M20 Lynx + AgileX Piper arm
+#
+# Place this file at:
+#   <your_ws>/src/lynx_quanta/config/m20_with_piper_controller.yaml
+#
+# Controllers loaded:
+#   joint_state_broadcaster   — publishes /joint_states for all 24 joints
+#   leg_controller            — JointGroupPositionController for 12 leg joints
+#   wheel_controller          — JointGroupVelocityController for 4 wheels
+#   arm_controller            — JointTrajectoryController for 6 arm joints
+#   gripper_controller        — JointGroupPositionController for 2 fingers
+# =============================================================================
+
+controller_manager:
+  ros__parameters:
+    update_rate: 200  # Hz — match IMU rate; control loop runs at this frequency
+
+    # ── Broadcasters ─────────────────────────────────────────────────────────
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    # ── Dog locomotion ────────────────────────────────────────────────────────
+    leg_controller:
+      type: joint_group_position_controller/JointGroupPositionController
+
+    wheel_controller:
+      type: joint_group_velocity_controller/JointGroupVelocityController
+
+    # ── Piper arm ─────────────────────────────────────────────────────────────
+    # JointTrajectoryController gives you MoveIt 2 / action-server support
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    gripper_controller:
+      type: joint_group_position_controller/JointGroupPositionController
+
+# =============================================================================
+# Dog leg joints — position controlled
+# =============================================================================
+leg_controller:
+  ros__parameters:
+    joints:
+      - fl_hipx_joint
+      - fl_hipy_joint
+      - fl_knee_joint
+      - fr_hipx_joint
+      - fr_hipy_joint
+      - fr_knee_joint
+      - hl_hipx_joint
+      - hl_hipy_joint
+      - hl_knee_joint
+      - hr_hipx_joint
+      - hr_hipy_joint
+      - hr_knee_joint
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+
+# =============================================================================
+# Dog wheel joints — velocity controlled
+# =============================================================================
+wheel_controller:
+  ros__parameters:
+    joints:
+      - fl_wheel_joint
+      - fr_wheel_joint
+      - hl_wheel_joint
+      - hr_wheel_joint
+    command_interfaces:
+      - velocity
+    state_interfaces:
+      - position
+      - velocity
+
+# =============================================================================
+# Piper arm — trajectory controller (MoveIt 2 compatible)
+# =============================================================================
+arm_controller:
+  ros__parameters:
+    joints:
+      - arm_joint1
+      - arm_joint2
+      - arm_joint3
+      - arm_joint4
+      - arm_joint5
+      - arm_joint6
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    state_publish_rate: 100.0   # Hz
+    action_monitor_rate: 20.0   # Hz
+    allow_partial_joints_goal: false
+    constraints:
+      stopped_velocity_tolerance: 0.01  # rad/s
+      goal_time: 0.0                    # 0 = no timeout
+      arm_joint1: { trajectory: 0.05, goal: 0.01 }
+      arm_joint2: { trajectory: 0.05, goal: 0.01 }
+      arm_joint3: { trajectory: 0.05, goal: 0.01 }
+      arm_joint4: { trajectory: 0.05, goal: 0.01 }
+      arm_joint5: { trajectory: 0.05, goal: 0.01 }
+      arm_joint6: { trajectory: 0.05, goal: 0.01 }
+
+# =============================================================================
+# Piper gripper fingers — position controlled
+# Fingers are coupled: command them symmetrically.
+#   Open  : arm_joint7 = 0.035,  arm_joint8 = -0.035
+#   Closed: arm_joint7 = 0.000,  arm_joint8 =  0.000
+# =============================================================================
+gripper_controller:
+  ros__parameters:
+    joints:
+      - arm_joint7
+      - arm_joint8
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity

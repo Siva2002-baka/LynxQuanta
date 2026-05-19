@@ -17,8 +17,8 @@ def generate_launch_description():
         description='Use Gazebo simulation clock')
 
     pkg_lynx    = get_package_share_directory('lynx_quanta')
-    urdf        = os.path.join(pkg_lynx, 'urdf', 'm20_with_arm', 'm20_with_arm.urdf')
-    ctrl_yaml   = os.path.join(pkg_lynx, 'config', 'm20_with_arm_controller.yaml')
+    urdf        = os.path.join(pkg_lynx, 'urdf', 'm20_with_arm', 'm20_with_piper.urdf')
+    ctrl_yaml   = os.path.join(pkg_lynx, 'config', 'm20_with_piper_controller.yaml')
 
     robot_desc = ParameterValue(
         Command(['xacro ', urdf, ' ', 'ros2_control_yaml:=', ctrl_yaml]),
