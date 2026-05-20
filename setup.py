@@ -48,6 +48,8 @@ setup(
             'lynx_brain = lynx_quanta.lynx_brain:main',
             'depth_visualizer = lynx_quanta.depth_visualizer:main',
             'lidar_merger = lynx_quanta.lidar_merger:main',
+            'arm_controller = lynx_quanta.piper_ik_arm_controller:main',
+            'scan_merger = lynx_quanta.scan_merger:main',
         ],
     },
 )

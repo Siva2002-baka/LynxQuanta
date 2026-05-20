@@ -52,7 +52,7 @@ def generate_launch_description():
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
             '/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
             '/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V',
-            '/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
+            # '/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model',
             "/imu/data@sensor_msgs/msg/Imu[gz.msgs.IMU",
             '/camera_front/depth_image@sensor_msgs/msg/Image@gz.msgs.Image',
             '/camera_front/camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo',
@@ -123,7 +123,14 @@ def generate_launch_description():
         arguments=["arm_controller"],
         parameters=[{"use_sim_time": use_sim_time}],
         output="screen",
+    )
 
+    gripper_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["gripper_controller"],
+        parameters=[{"use_sim_time": use_sim_time}],
+        output="screen",
     )
 
     depth_visualizer_node = Node(
@@ -181,6 +188,7 @@ def generate_launch_description():
     ld.add_action(leg_pose_controller)
     ld.add_action(wheel_velocity_controller)
     ld.add_action(arm_controller_spawner)
+    ld.add_action(gripper_controller_spawner)
     ld.add_action(slam_toolbox)
     ld.add_action(depth_visualizer_node)
     ld.add_action(dual_lidar_merger_node)
