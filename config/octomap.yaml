@@ -47,3 +47,5 @@ octomap_server_node:
 
     # ── Performance ───────────────────────────────────────────────────────────
     latch: false
+
+    transform_tolerance: 0.5    # allow 500ms TF latency (Gazebo sim can be slow) 
