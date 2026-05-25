@@ -22,24 +22,27 @@ controller_manager:
       type: joint_state_broadcaster/JointStateBroadcaster
 
     # ── Dog locomotion ────────────────────────────────────────────────────────
-    leg_controller:
-      type: joint_group_position_controller/JointGroupPositionController
-
-    wheel_controller:
-      type: joint_group_velocity_controller/JointGroupVelocityController
+    leg_pose_controller:
+      type: position_controllers/JointGroupPositionController
+    
+    wheel_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
 
     # ── Piper arm ─────────────────────────────────────────────────────────────
     # JointTrajectoryController gives you MoveIt 2 / action-server support
     arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
+    # gripper_controller:
+    #   type: joint_group_position_controller/JointGroupPositionController
+
     gripper_controller:
-      type: joint_group_position_controller/JointGroupPositionController
+      type: joint_trajectory_controller/JointTrajectoryController
 
 # =============================================================================
 # Dog leg joints — position controlled
 # =============================================================================
-leg_controller:
+leg_pose_controller:
   ros__parameters:
     joints:
       - fl_hipx_joint
@@ -63,7 +66,7 @@ leg_controller:
 # =============================================================================
 # Dog wheel joints — velocity controlled
 # =============================================================================
-wheel_controller:
+wheel_velocity_controller:
   ros__parameters:
     joints:
       - fl_wheel_joint
@@ -88,37 +91,82 @@ arm_controller:
       - arm_joint4
       - arm_joint5
       - arm_joint6
+
     command_interfaces:
       - position
+
     state_interfaces:
       - position
       - velocity
-    state_publish_rate: 100.0   # Hz
-    action_monitor_rate: 20.0   # Hz
-    allow_partial_joints_goal: false
-    constraints:
-      stopped_velocity_tolerance: 0.01  # rad/s
-      goal_time: 0.0                    # 0 = no timeout
-      arm_joint1: { trajectory: 0.05, goal: 0.01 }
-      arm_joint2: { trajectory: 0.05, goal: 0.01 }
-      arm_joint3: { trajectory: 0.05, goal: 0.01 }
-      arm_joint4: { trajectory: 0.05, goal: 0.01 }
-      arm_joint5: { trajectory: 0.05, goal: 0.01 }
-      arm_joint6: { trajectory: 0.05, goal: 0.01 }
 
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+
+    constraints:
+      goal_time: 10.0
+      stopped_velocity_tolerance: 1.0
+
+      arm_joint1:
+        trajectory: 1.20
+        goal: 0.80
+      arm_joint2:
+        trajectory: 1.20
+        goal: 0.80
+      arm_joint3:
+        trajectory: 1.20
+        goal: 0.80
+      arm_joint4:
+        trajectory: 1.20
+        goal: 0.80
+      arm_joint5:
+        trajectory: 1.20
+        goal: 0.80
+      arm_joint6:
+        trajectory: 1.20
+        goal: 0.80
 # =============================================================================
 # Piper gripper fingers — position controlled
 # Fingers are coupled: command them symmetrically.
 #   Open  : arm_joint7 = 0.035,  arm_joint8 = -0.035
 #   Closed: arm_joint7 = 0.000,  arm_joint8 =  0.000
 # =============================================================================
+# gripper_controller:
+#   ros__parameters:
+#     joints:
+#       - arm_joint7
+#       - arm_joint8
+#     command_interfaces:
+#       - position
+#     state_interfaces:
+#       - position
+#       - velocity
+
 gripper_controller:
   ros__parameters:
     joints:
       - arm_joint7
       - arm_joint8
+
     command_interfaces:
       - position
+
     state_interfaces:
       - position
       - velocity
+
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+
+    constraints:
+      goal_time: 6.0
+      stopped_velocity_tolerance: 0.05
+
+      arm_joint7:
+        trajectory: 0.020
+        goal: 0.008
+
+      arm_joint8:
+        trajectory: 0.020
+        goal: 0.008

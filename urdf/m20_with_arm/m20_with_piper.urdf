@@ -741,7 +741,8 @@
     <parent link="arm_link1"/>
     <child  link="arm_link2"/>
     <axis xyz="0 0 1"/>
-    <limit lower="0" upper="3.14" effort="100" velocity="5"/>
+    <!-- <limit lower="0" upper="3.14" effort="100" velocity="5"/> -->
+    <limit lower="0" upper="3.4034" effort="100" velocity="3.403"/>
     <dynamics damping="0.5" friction="0.1"/>
   </joint>
 
@@ -807,7 +808,8 @@
     <parent link="arm_link3"/>
     <child  link="arm_link4"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-1.745" upper="1.745" effort="100" velocity="5"/>
+    <!-- <limit lower="-1.745" upper="1.745" effort="100" velocity="5"/> -->
+    <limit lower="-1.7453" upper="1.9548" effort="100" velocity="3.927"/>
     <dynamics damping="0.3" friction="0.05"/>
   </joint>
 
@@ -873,7 +875,8 @@
     <parent link="arm_link5"/>
     <child  link="arm_link6"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-2.0944" upper="2.0944" effort="100" velocity="3"/>
+    <!-- <limit lower="-2.0944" upper="2.0944" effort="100" velocity="3"/> -->
+    <limit lower="-2.9671" upper="2.9671" effort="100" velocity="3.927"/>
     <dynamics damping="0.2" friction="0.02"/>
   </joint>
 
@@ -932,13 +935,13 @@
     </collision>
   </link>
   <joint name="arm_joint7" type="prismatic">
-    <!-- Left finger: slides +Z in link7 local frame (opens away) -->
+    <!-- Left finger: positive command opens -->
     <origin xyz="0 0 0.1358" rpy="1.5708 0 0"/>
     <parent link="arm_gripper_base"/>
     <child  link="arm_link7"/>
     <axis xyz="0 0 1"/>
-    <limit lower="0" upper="0.035" effort="10" velocity="1"/>
-    <dynamics damping="0.1" friction="0.01"/>
+    <limit lower="0.0" upper="0.035" effort="120" velocity="0.5"/>
+    <dynamics damping="1.0" friction="0.0"/>
   </joint>
 
   <!-- ── arm_link8 — right gripper finger (prismatic, mirrored) ────────── -->
@@ -966,13 +969,13 @@
     </collision>
   </link>
   <joint name="arm_joint8" type="prismatic">
-    <!-- Right finger: slides −Z in link8 local frame (mirrors link7) -->
+    <!-- Right finger: mirrored by joint origin; positive command opens -->
     <origin xyz="0 0 0.1358" rpy="1.5708 0 -3.1416"/>
     <parent link="arm_gripper_base"/>
     <child  link="arm_link8"/>
-    <axis xyz="0 0 -1"/>
-    <limit lower="-0.035" upper="0" effort="10" velocity="1"/>
-    <dynamics damping="0.1" friction="0.01"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0.0" upper="0.035" effort="120" velocity="0.5"/>
+    <dynamics damping="1.0" friction="0.0"/>
   </joint>
 
   <!-- ======================================================================
@@ -1264,12 +1267,12 @@
   </gazebo>
 
   <!-- Joint state publisher -->
-  <gazebo>
+  <!-- <gazebo>
     <plugin filename="ignition-gazebo-joint-state-publisher-system"
             name="ignition::gazebo::systems::JointStatePublisher">
       <topic>/joint_states</topic>
     </plugin>
-  </gazebo>
+  </gazebo> -->
 
   <!-- ROS 2 control bridge -->
   <gazebo>
