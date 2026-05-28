@@ -1,0 +1,3 @@
+[submodule "moveit2_for_arm"]
+	path = moveit2_for_arm
+	url = https://github.com/Siva2002-baka/lynx_quanta_moveit_py.git
