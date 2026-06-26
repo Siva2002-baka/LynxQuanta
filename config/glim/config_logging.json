@@ -1,9 +1,9 @@
 {
   "logging": {
-    "log_dir": "/tmp",
+    "log_dir": "/tmp/glim_m20",
     "save_logs": true,
     "rotate_logs": true,
-    "max_file_size_kb": 8192,
+    "max_file_size_kb": 16384,
     "max_files": 10
   }
 }

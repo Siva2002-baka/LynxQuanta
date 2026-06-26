@@ -1,12 +1,10 @@
 {
   "sensors": {
-    "imu_acc_noise": 0.05,
-    "imu_gyro_noise": 0.02,
+    "imu_acc_noise": 0.03,
+    "imu_gyro_noise": 0.01,
     "imu_int_noise": 0.001,
-    "imu_bias_noise": 0.00001,
-
+    "imu_bias_noise": 1e-05,
     "global_shutter_lidar": true,
-
     "T_lidar_imu": [
       -0.25708,
       -0.0268,
@@ -16,21 +14,21 @@
       0.0,
       1.0
     ],
-
     "intensity_field": "intensity",
     "ring_field": "",
-
     "autoconf_perpoint_times": false,
     "autoconf_prefer_frame_time": true,
-    "perpoint_relative_time": true,
+    "perpoint_relative_time": false,
     "perpoint_time_scale": 1.0,
-
     "global_shutter_camera": true,
-    "image_size": [640, 480],
+    "image_size": [
+      640,
+      480
+    ],
     "T_lidar_camera": [
+      0.05618,
       0.0,
-      0.0,
-      0.0,
+      0.05038,
       0.0,
       0.0,
       0.0,

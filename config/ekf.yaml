@@ -8,10 +8,10 @@ ekf_filter_node:
     publish_acceleration: false
 
     # ── Frames — unified to base_link ────────────────────────────────────────
-    # base_link matches OdometryPublisher robot_base_frame and slam_toolbox
-    # base_frame — no more chaining through base_footprint
+    # For wheel-odom EKF only. Keep this as base_footprint because the Gazebo
+    # OdometryPublisher in the URDF uses robot_base_frame=base_footprint.
     odom_frame:      odom
-    base_link_frame: base_link
+    base_link_frame: base_footprint
     world_frame:     odom
 
     # ── Input 0: Odometry from Gazebo OdometryPublisher ──────────────────────

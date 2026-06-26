@@ -1,12 +1,12 @@
 {
   "preprocess": {
-    "distance_near_thresh": 0.3,
-    "distance_far_thresh": 50.0,
+    "distance_near_thresh": 0.35,
+    "distance_far_thresh": 20.0,
     "use_random_grid_downsampling": true,
-    "downsample_resolution": 0.15,
-    "random_downsample_target": 8000,
-    "random_downsample_rate": 0.3,
-    "enable_outlier_removal": false,
+    "downsample_resolution": 0.12,
+    "random_downsample_target": 12000,
+    "random_downsample_rate": 0.5,
+    "enable_outlier_removal": true,
     "outlier_removal_k": 10,
     "outlier_std_mul_factor": 2.0,
     "enable_cropbox_filter": false,

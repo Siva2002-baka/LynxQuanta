@@ -12,7 +12,7 @@ octomap_server_node:
 
     # ── Input ─────────────────────────────────────────────────────────────────
     # FastLIO2 publishes registered (world-frame) point cloud here
-    pointcloud_topic: "/cloud_registered"
+    pointcloud_topic: "/glim/global_map"   # change to the actual GLIM map/cloud topic after: ros2 topic list | grep -i "glim\|map\|cloud"
 
     # ── Map frames ────────────────────────────────────────────────────────────
     # FastLIO2 publishes in "camera_init" frame by default.
@@ -21,7 +21,7 @@ octomap_server_node:
 
     # ── Voxel resolution ──────────────────────────────────────────────────────
     # 0.05m = 5cm cells — matches Nav2 costmap resolution
-    resolution: 0.05
+    resolution: 0.10
 
     # ── Height filtering for 2D projection ────────────────────────────────────
     # Only include points between these heights (in map frame).
@@ -34,7 +34,7 @@ octomap_server_node:
     occupancy_max_z:  1.8        # max height to mark as obstacle (180cm)
 
     # ── Probabilities ─────────────────────────────────────────────────────────
-    sensor_model_max_range:  15.0   # matches FastLIO2 det_range
+    sensor_model_max_range:  20.0   # matches FastLIO2 det_range
     sensor_model_hit:        0.7
     sensor_model_miss:       0.4
     sensor_model_min:        0.12
