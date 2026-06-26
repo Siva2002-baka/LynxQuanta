@@ -17,8 +17,13 @@ def generate_launch_description():
         description='Use Gazebo simulation clock')
 
     pkg_lynx    = get_package_share_directory('lynx_quanta')
-    urdf        = os.path.join(pkg_lynx, 'urdf', 'm20_with_arm', 'm20_with_piper.urdf')
+    urdf        = os.path.join(pkg_lynx, 'urdf', 'm20_with_arm', 'm20_with_piper_v3.urdf')
     ctrl_yaml   = os.path.join(pkg_lynx, 'config', 'm20_with_piper_controller.yaml')
+    world_file = os.path.join(
+        pkg_lynx,
+        "worlds",
+        "lynx_test_terrain.sdf",
+    )
 
     robot_desc = ParameterValue(
         Command(['xacro ', urdf, ' ', 'ros2_control_yaml:=', ctrl_yaml]),
@@ -26,9 +31,16 @@ def generate_launch_description():
 
     # ── Gazebo Harmonic ───────────────────────────────────────────────────────
     gz_sim = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(
-            get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')),
-        launch_arguments={'gz_args': '-r empty.sdf'}.items()
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory("ros_gz_sim"),
+                "launch",
+                "gz_sim.launch.py",
+            )
+        ),
+        launch_arguments={
+            "gz_args": f"-r {world_file}",
+        }.items(),
     )
 
     gz_spawn = Node(

@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<sdf version="1.9">
+  <model name="chair_1">
+    <static>false</static>
+    <self_collide>false</self_collide>
+
+    <link name="chair_body">
+      <pose>0 0 0.43 0 0 0</pose>
+
+      <inertial>
+        <mass>8.0</mass>
+        <inertia>
+          <ixx>0.45</ixx>
+          <iyy>0.45</iyy>
+          <izz>0.35</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+
+      <!-- Seat -->
+      <visual name="seat_visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.55 0.55 0.10</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.08 0.08 0.08 1</ambient>
+          <diffuse>0.08 0.08 0.08 1</diffuse>
+        </material>
+      </visual>
+
+      <collision name="seat_collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.55 0.55 0.10</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Backrest -->
+      <visual name="back_visual">
+        <pose>-0.24 0 0.38 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.08 0.55 0.75</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.05 0.05 0.05 1</ambient>
+          <diffuse>0.05 0.05 0.05 1</diffuse>
+        </material>
+      </visual>
+
+      <collision name="back_collision">
+        <pose>-0.24 0 0.38 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>0.08 0.55 0.75</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <!-- Pedestal -->
+      <visual name="pedestal_visual">
+        <pose>0 0 -0.26 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.04</radius>
+            <length>0.52</length>
+          </cylinder>
+        </geometry>
+      </visual>
+
+      <collision name="pedestal_collision">
+        <pose>0 0 -0.26 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.04</radius>
+            <length>0.52</length>
+          </cylinder>
+        </geometry>
+      </collision>
+
+      <!-- 5-star rolling base, simplified as one low-friction collision -->
+      <visual name="base_visual">
+        <pose>0 0 -0.53 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.38</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+      </visual>
+
+      <collision name="base_collision">
+        <pose>0 0 -0.53 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.38</radius>
+            <length>0.04</length>
+          </cylinder>
+        </geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.05</mu>
+              <mu2>0.05</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+
+    </link>
+  </model>
+</sdf>

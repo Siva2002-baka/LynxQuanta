@@ -645,7 +645,7 @@
       If you need the arm shifted forward for better reach, try x = 0.05.
       To rotate the arm 180° (facing rearward), set rpy = "0 0 3.14159265".
     -->
-    <origin xyz="0.0 0.0 0.09" rpy="0 0 0"/>
+    <origin xyz="0.26 0.0 0.07" rpy="0 0 0"/>
   </joint>
 
   <!-- ======================================================================
@@ -710,7 +710,7 @@
     <parent link="arm_base_link"/>
     <child  link="arm_link1"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-2.618" upper="2.618" effort="100" velocity="5"/>
+    <limit lower="-2.6878" upper="2.6878" effort="100" velocity="3.1416"/>
     <dynamics damping="0.5" friction="0.1"/>
   </joint>
 
@@ -777,7 +777,7 @@
     <parent link="arm_link2"/>
     <child  link="arm_link3"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-2.967" upper="0" effort="100" velocity="5"/>
+    <limit lower="-3.0543" upper="0" effort="100" velocity="3.1416"/>
     <dynamics damping="0.5" friction="0.1"/>
   </joint>
 
@@ -810,8 +810,7 @@
     <parent link="arm_link3"/>
     <child  link="arm_link4"/>
     <axis xyz="0 0 1"/>
-    <!-- <limit lower="-1.745" upper="1.745" effort="100" velocity="5"/> -->
-    <limit lower="-1.7453" upper="1.9548" effort="100" velocity="3.927"/>
+    <limit lower="-1.8500" upper="1.8500" effort="100" velocity="3.9270"/>
     <dynamics damping="0.3" friction="0.05"/>
   </joint>
 
@@ -844,7 +843,7 @@
     <parent link="arm_link4"/>
     <child  link="arm_link5"/>
     <axis xyz="0 0 1"/>
-    <limit lower="-1.22" upper="1.22" effort="100" velocity="5"/>
+    <limit lower="-1.3090" upper="1.3090" effort="100" velocity="3.9270"/>
     <dynamics damping="0.3" friction="0.05"/>
   </joint>
 
@@ -877,8 +876,7 @@
     <parent link="arm_link5"/>
     <child  link="arm_link6"/>
     <axis xyz="0 0 1"/>
-    <!-- <limit lower="-2.0944" upper="2.0944" effort="100" velocity="3"/> -->
-    <limit lower="-2.9671" upper="2.9671" effort="100" velocity="3.927"/>
+    <limit lower="-1.7453" upper="1.7453" effort="100" velocity="3.9270"/>
     <dynamics damping="0.2" friction="0.02"/>
   </joint>
 
@@ -1175,19 +1173,19 @@
          Keep this reduced version for stable mapping tests. -->
     <sensor name="lidar_front" type="gpu_lidar">
       <always_on>1</always_on>
-      <update_rate>5</update_rate>
+      <update_rate>10</update_rate>
       <topic>lidar_front</topic>
       <gz_frame_id>lidar_front_link</gz_frame_id>
       <lidar>
         <scan>
           <horizontal>
-            <samples>360</samples>
+            <samples>720</samples>
             <resolution>1</resolution>
             <min_angle>-3.14159265</min_angle>
             <max_angle>3.14159265</max_angle>
           </horizontal>
           <vertical>
-            <samples>16</samples>
+            <samples>32</samples>
             <resolution>1</resolution>
             <min_angle>-0.261799</min_angle>
             <max_angle>0.261799</max_angle>
@@ -1215,19 +1213,19 @@
          Keep this reduced version for stable mapping tests. -->
     <sensor name="lidar_rear" type="gpu_lidar">
       <always_on>1</always_on>
-      <update_rate>5</update_rate>
+      <update_rate>10</update_rate>
       <topic>lidar_rear</topic>
       <gz_frame_id>lidar_rear_link</gz_frame_id>
       <lidar>
         <scan>
           <horizontal>
-            <samples>360</samples>
+            <samples>720</samples>
             <resolution>1</resolution>
             <min_angle>-3.14159265</min_angle>
             <max_angle>3.14159265</max_angle>
           </horizontal>
           <vertical>
-            <samples>16</samples>
+            <samples>32</samples>
             <resolution>1</resolution>
             <min_angle>-0.261799</min_angle>
             <max_angle>0.261799</max_angle>
@@ -1291,7 +1289,7 @@
     <plugin filename="gz-sim-odometry-publisher-system"
             name="gz::sim::systems::OdometryPublisher">
       <odom_frame>odom</odom_frame>
-      <robot_base_frame>base_footprint</robot_base_frame>
+      <robot_base_frame>base_link</robot_base_frame>
       <odom_publish_frequency>30</odom_publish_frequency>
       <odom_topic>odom</odom_topic>
       <tf_topic>tf</tf_topic>
